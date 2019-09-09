@@ -9,6 +9,3 @@ uptime is a vuejs app to monitor a website/server
   - back : NodeJs + Express
   - db : Mongo
 
-  
-  
-

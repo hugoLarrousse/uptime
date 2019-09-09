@@ -1,0 +1,24 @@
+#Logs
+*.log
+
+# API keys and secrets
+.env*
+._.env
+._certificates
+._env*
+env*
+
+# Dependency directory
+node_modules
+
+# OS metadata
+.DS_Store
+
+.vscode
+
+*.orig
+
+dist
+
+# Test
+coverage
