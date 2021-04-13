@@ -35,9 +35,13 @@ elapsedTime: *${elapsedTime}ms*`;
 
 
 exports.error = (url, statusCode) => {
-  return customLogger.error(createLabelStatusCode(url, statusCode));
+  const label = createLabelStatusCode(url, statusCode);
+  console.error(label);
+  return customLogger.error(label);
 };
 
 exports.warn = (url, elapsedTime, max) => {
-  return customLogger.warn(createLabelElapsedTime(url, elapsedTime, max));
+  const label = createLabelElapsedTime(url, elapsedTime, max)
+  console.warn(label);
+  return customLogger.warn(label);
 };
