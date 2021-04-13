@@ -37,10 +37,14 @@ let normalStatusCode = 0;
 //   console.log(`Uptime-core is running at ${new Date()} on 3002`);
 // });
 
+const isBusy = false;
+
 
 const main = async () => {
   cron.schedule('* * * * *', async () => {
     try {
+      if (busy) throw Error('busy');
+      busy = true;
       const { statusCode, elapsedTime } = await request(options);
 
       if (statusCode !== 200) {
@@ -63,6 +67,7 @@ const main = async () => {
         await mongo.incrementStatusCode(200, 59);
         normalStatusCode = 0;
       }
+      busy = false;
       // console.log('timer :', timer);
       // console.log('normalStatusCode :', normalStatusCode);
     } catch (e) {
