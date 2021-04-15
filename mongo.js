@@ -1,12 +1,12 @@
 const { MongoClient } = require('mongodb');
 const moment = require('moment');
 
-const { urlServer, database, collection } = process.env;
+const { dbServer, database, collection } = process.env;
 let mongodbConnect = null;
 
 exports.createConnection = async () => {
   try {
-    mongodbConnect = await MongoClient.connect(urlServer, { poolSize: 3, useNewUrlParser: true, useUnifiedTopology: true });
+    mongodbConnect = await MongoClient.connect(dbServer, { poolSize: 1, useNewUrlParser: true, useUnifiedTopology: true });
     return 1;
   } catch (e) {
     logger.error(__filename, 'createConnection', e.message);
@@ -36,8 +36,8 @@ exports.pushElapseTime = (time) => {
 
 exports.incrementStatusCode = (statusCode, value) => {
   return findAndModify(
-    'heptaward',
-    'counters',
+    database,
+    collection,
     { _id: `uptime-status-code-${moment().format('DD-MM-YYYY')}` },
     { $inc: { [statusCode]: value || 1 } },
     { returnOriginal: false, upsert: true },

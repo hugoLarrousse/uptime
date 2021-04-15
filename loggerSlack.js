@@ -1,14 +1,14 @@
 const winston = require('winston');
 const WinstonSlack = require('winston-slack-hook');
 
-const { slackUrl, channel }= process.env;
+const { slackUrl, channelSlack }= process.env;
 
 const customLogger = winston.createLogger({
   transports: [
     new WinstonSlack({
       hookUrl: slackUrl,
       username: 'Thierry Roland',
-      channel: `#${channel}`,
+      channel: `#${channelSlack}`,
       prependLevel: false,
       appendMeta: false,
       colors: {

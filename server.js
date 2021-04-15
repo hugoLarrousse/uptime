@@ -1,11 +1,6 @@
 const request = require('requestretry');
 const cron = require('node-cron');
-const moment = require('moment');
 require('dotenv').config();
-
-// const express = require('express')();
-
-// const server = require('http').createServer(express);
 
 const logger = require('./loggerSlack');
 const mongo = require('./mongo');
@@ -28,23 +23,14 @@ const MINUTE_STORE = 0;
 let timer = [];
 let normalStatusCode = 0;
 
-
-// express.all('/', (req, res) => {
-//   res.status(200).send({ message: 'Welcome to uptime' });
-// });
-
-// server.listen(3002, () => {
-//   console.log(`Uptime-core is running at ${new Date()} on 3002`);
-// });
-
-const isBusy = false;
+let isBusy = false;
 
 
 const main = async () => {
   cron.schedule('* * * * *', async () => {
     try {
-      if (busy) throw Error('busy');
-      busy = true;
+      if (isBusy) throw Error('busy');
+      isBusy = true;
       const { statusCode, elapsedTime } = await request(options);
 
       if (statusCode !== 200) {
@@ -58,7 +44,8 @@ const main = async () => {
       }
 
       timer.push(elapsedTime);
-      if (moment().minutes() === MINUTE_STORE) {
+
+      if (new Date().getMinutes() === MINUTE_STORE) {
         const avgTime = timer.reduce((a,b) => a + b, 0) / timer.length;
         await mongo.pushElapseTime(avgTime);
         timer = [];
@@ -67,7 +54,7 @@ const main = async () => {
         await mongo.incrementStatusCode(200, 59);
         normalStatusCode = 0;
       }
-      busy = false;
+      isBusy = false;
       // console.log('timer :', timer);
       // console.log('normalStatusCode :', normalStatusCode);
     } catch (e) {
@@ -78,6 +65,8 @@ const main = async () => {
 
 mongo.createConnection().then((code) => {
   if (code) {
+    console.log(`Mongo connected`);
+    console.log(`*** Uptime "${process.env.NODE_ENV || 'development'}" is running ***`);
     main()
   } else {
     console.log('Error with MongoDb connection');
