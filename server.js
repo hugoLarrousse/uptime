@@ -6,6 +6,7 @@ const logger = require('./loggerSlack');
 const mongo = require('./mongo');
 
 const { testUrl } = process.env;
+console.log('testUrl', testUrl);
 
 const options = {
   url: testUrl,
@@ -13,7 +14,7 @@ const options = {
   time: true,
   maxAttempts: 3,
   retryDelay: 5000,
-  retryStrategy: request.RetryStrategies.HTTPOrNetworkError
+  retryStrategy: request.RetryStrategies.HTTPOrNetworkError,
 };
 
 const MAX_ELAPSE_TIME = 300;
@@ -37,7 +38,7 @@ const main = async () => {
         await logger.error(testUrl, statusCode);
         await mongo.incrementStatusCode(statusCode);
       } else {
-        normalStatusCode +=1;
+        normalStatusCode += 1;
       }
       if (statusCode === 200 && elapsedTime > MAX_ELAPSE_TIME) {
         await logger.warn(testUrl, elapsedTime, MAX_ELAPSE_TIME);
@@ -61,11 +62,11 @@ const main = async () => {
       console.log('e.message :', e.message);
     }
   });
-}
+};
 
 mongo.createConnection().then((code) => {
   if (code) {
-    console.log(`Mongo connected`);
+    console.log('Mongo connected');
     console.log(`*** Uptime "${process.env.NODE_ENV || 'development'}" is running ***`);
     main()
   } else {

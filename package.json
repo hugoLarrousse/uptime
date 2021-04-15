@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "production": "npm install && pm2 reload uptime --update-env"
   },
   "keywords": [
     "uptime",
