@@ -1,7 +1,7 @@
 const winston = require('winston');
 const WinstonSlack = require('winston-slack-hook');
 
-const { slackUrl, channelSlack }= process.env;
+const { slackUrl, channelSlack } = process.env;
 
 const customLogger = winston.createLogger({
   transports: [
@@ -21,18 +21,13 @@ const customLogger = winston.createLogger({
   ],
 });
 
-const createLabelStatusCode = (url, statusCode) => {
-  return `*ERROR*
+const createLabelStatusCode = (url, statusCode) => `*ERROR*
 ${url}
 statusCode: *${statusCode}*`;
-};
 
-const createLabelElapsedTime = (url, elapsedTime, max) => {
-  return `${url}
+const createLabelElapsedTime = (url, elapsedTime, max) => `${url}
 response time too long (> ${max}ms),
 elapsedTime: *${elapsedTime}ms*`;
-};
-
 
 exports.error = (url, statusCode) => {
   const label = createLabelStatusCode(url, statusCode);
@@ -41,7 +36,7 @@ exports.error = (url, statusCode) => {
 };
 
 exports.warn = (url, elapsedTime, max) => {
-  const label = createLabelElapsedTime(url, elapsedTime, max)
+  const label = createLabelElapsedTime(url, elapsedTime, max);
   console.warn(label);
   return customLogger.warn(label);
 };

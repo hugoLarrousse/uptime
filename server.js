@@ -6,7 +6,6 @@ const logger = require('./loggerSlack');
 const mongo = require('./mongo');
 
 const { testUrl } = process.env;
-console.log('testUrl', testUrl);
 
 const options = {
   url: testUrl,
@@ -47,7 +46,7 @@ const main = async () => {
       timer.push(elapsedTime);
 
       if (new Date().getMinutes() === MINUTE_STORE) {
-        const avgTime = timer.reduce((a,b) => a + b, 0) / timer.length;
+        const avgTime = timer.reduce((a, b) => a + b, 0) / timer.length;
         await mongo.pushElapseTime(avgTime);
         timer = [];
       }
@@ -56,8 +55,8 @@ const main = async () => {
         normalStatusCode = 0;
       }
       isBusy = false;
-      // console.log('timer :', timer);
-      // console.log('normalStatusCode :', normalStatusCode);
+      console.log('timer :', timer);
+      console.log('normalStatusCode :', normalStatusCode);
     } catch (e) {
       console.log('e.message :', e.message);
     }
@@ -68,9 +67,8 @@ mongo.createConnection().then((code) => {
   if (code) {
     console.log('Mongo connected');
     console.log(`*** Uptime "${process.env.NODE_ENV || 'development'}" is running ***`);
-    main()
+    main();
   } else {
     console.log('Error with MongoDb connection');
   }
 });
-
