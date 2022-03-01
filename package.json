@@ -21,7 +21,7 @@
     "mongodb": "^3.3.5",
     "node-cron": "^2.0.3",
     "request": "^2.88.0",
-    "requestretry": "^4.0.2",
+    "requestretry": "^7.0.0",
     "winston": "^3.2.1",
     "winston-slack-hook": "^0.3.0"
   },
